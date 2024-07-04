@@ -1,16 +1,19 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IPlayerController
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float interactionDistance = 3f;
-
+    private bool isCanUsingCube = true;
+    public bool CanUsingCube { get { return isCanUsingCube; } set { isCanUsingCube = value; } }
+    public event System.Action cubeIsPutOnTheFloor;
     public void Interaction()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
             // Поиск объектов в радиусе взаимодействия
-            Collider[] colliders = Physics.OverlapSphere(transform.position, interactionDistance);
+           Collider[] colliders = Physics.OverlapSphere(transform.position, interactionDistance);
 
             // Проверка каждого объекта
             foreach (Collider collider in colliders)
@@ -21,12 +24,16 @@ public class PlayerController : MonoBehaviour, IPlayerController
                 if (interactable != null)
                 {
                     // Взаимодействие с объектом
-                    interactable.Use(this.transform);
+                    interactable.Use(this);
+                    isCanUsingCube = !isCanUsingCube;
+                    if (!isCanUsingCube)
+                        cubeIsPutOnTheFloor?.Invoke();
                     break;
                 }
             }
         }
     }
+
 
     public void Move()
     {
@@ -42,7 +49,6 @@ public class PlayerController : MonoBehaviour, IPlayerController
     void FixedUpdate()
     {
         Move();
-        
     }
 
     void Update()

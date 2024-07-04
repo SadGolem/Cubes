@@ -3,13 +3,15 @@ using UnityEngine;
 public class Interactable : MonoBehaviour, IInterectable
 {
     private bool isUsing = false;
+    public bool isCanTouch = true;
 
-    public void Use(Transform playerTransform)
+    public void Use(PlayerController player)
     {
-        if (!isUsing)
+        if (!isCanTouch) return;
+        if (!isUsing && player.CanUsingCube)
         {
             // Прикрепляем объект к персонажу
-            transform.SetParent(playerTransform);
+            transform.SetParent(player.transform);
             transform.localPosition = Vector3.zero; 
             transform.localRotation = Quaternion.identity;
 

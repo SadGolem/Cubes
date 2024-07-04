@@ -10,10 +10,10 @@ public interface IPlayerController
 
 public interface IPlayer
 {
-    //здесь предполагается какое-то 
+    //на случай необходимости реализации IPlayer
 }
 
 public interface IInterectable
 {
-    public void Use(Transform transform);
+    public void Use(PlayerController player);
 }
