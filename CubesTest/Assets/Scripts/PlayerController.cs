@@ -5,9 +5,16 @@ public class PlayerController : MonoBehaviour, IPlayerController
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float interactionDistance = 3f;
-    private bool isCanUsingCube = true;
-    public bool CanUsingCube { get { return isCanUsingCube; } set { isCanUsingCube = value; } }
-    public event System.Action cubeIsPutOnTheFloor;
+    private bool isUsingCube = true;
+    public bool CanUsingCube { get { return isUsingCube; } set { isUsingCube = value; } }
+    public event Action cubeIsPutOnTheFloor;
+
+    void Start()
+    {
+        CubeGridController cubeGridController = FindObjectOfType<CubeGridController>();
+        cubeGridController.SubscribeOnthePlayer(this);
+    }
+
     public void Interaction()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -15,7 +22,6 @@ public class PlayerController : MonoBehaviour, IPlayerController
             // Поиск объектов в радиусе взаимодействия
            Collider[] colliders = Physics.OverlapSphere(transform.position, interactionDistance);
 
-            // Проверка каждого объекта
             foreach (Collider collider in colliders)
             {
                 // Проверка, является ли объект взаимодействуемым
@@ -25,15 +31,14 @@ public class PlayerController : MonoBehaviour, IPlayerController
                 {
                     // Взаимодействие с объектом
                     interactable.Use(this);
-                    isCanUsingCube = !isCanUsingCube;
-                    if (!isCanUsingCube)
-                        cubeIsPutOnTheFloor?.Invoke();
+                    isUsingCube = !isUsingCube;
+                    if (isUsingCube)
+                        cubeIsPutOnTheFloor?.Invoke(); // FFFFFFFFFFFFFFFFFFFFFFFFFFFFF
                     break;
                 }
-            }
+            }   
         }
     }
-
 
     public void Move()
     {

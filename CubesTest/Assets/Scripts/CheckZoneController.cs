@@ -7,10 +7,11 @@ public class CheckZoneController : MonoBehaviour
 {
     public Transform zone2Grid;
     public List<GameObject> objectsInZone = new List<GameObject>();
+    [SerializeField] private static float tolerance = 0.1f;
 
     private void Start()
     {
-        StartCoroutine(CheckSolutionCoroutine()); // Запуск корутины для проверки раз в секунду
+       /* StartCoroutine(CheckSolutionCoroutine());*/ // Запуск корутины для проверки раз в секунду
     }
 
     private IEnumerator CheckSolutionCoroutine()
@@ -24,6 +25,7 @@ public class CheckZoneController : MonoBehaviour
 
     public void CheckCubes()
     {
+        Debug.Log("я проверяюсь");
         // Очистка предыдущих объектов
         objectsInZone.Clear();
 
@@ -61,5 +63,30 @@ public class CheckZoneController : MonoBehaviour
         }
 
         return positions;
+    }
+
+    public bool CheckPuzzleSolution(List<Vector3> zone1, List<Vector3> zone2)
+    {
+        // Проверка, что размер наборов одинаковый
+        if (zone1.Count != zone2.Count)
+        {
+            return false;
+        }
+
+        /*// Сортировка наборов для сравнения
+        cubePositionsZone1.Sort();
+        cubePositionsZone2.Sort();*/
+
+        // Проверка на совпадение с погрешностью
+        for (int i = 0; i < zone1.Count; i++)
+        {
+            // Проверяем, что разница между позициями меньше заданного порога
+            if (Vector3.Distance(zone1[i], zone2[i]) > tolerance)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

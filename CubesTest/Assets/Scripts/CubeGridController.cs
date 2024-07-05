@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class CubeGridController : MonoBehaviour
 {
-    [SerializeField] private CheckSolution checkSolution;
+    /*[SerializeField] private CheckSolution checkSolution;*/
     [SerializeField] private RandomCubesGenerator randomCubesGenerator;
+    [SerializeField] private CheckZoneController checkZoneController;
     [SerializeField] private GameObject cubePrefab; // Префаб куба
     [SerializeField] private Transform zone1Grid; // Трансформ сетки 3x3 в зоне 1
     [SerializeField] private Transform zone2Grid; // Трансформ сетки 3x3 в зоне 2
@@ -15,6 +16,7 @@ public class CubeGridController : MonoBehaviour
     private List<Cube> zone3Cubes = new List<Cube>(); // Список кубов в зоне 3
     private List<Color> randomCreatedColors = new List<Color>(); // Список созданных цветов
 
+    PlayerController playerController;
 
     private void Start()
     {
@@ -22,8 +24,17 @@ public class CubeGridController : MonoBehaviour
         randomCubesGenerator.CreateZone3Cubes(cubePrefab, zone3SpawnPoint, zone3Cubes, randomCreatedColors, cubePositionsZone1);
     }
 
-    void Check()
+    public void SubscribeOnthePlayer(PlayerController playerController)
     {
-        checkSolution.CheckPuzzleSolution(cubePositionsZone1, cubePositionsZone2);
+        // Подписываемся на событие cubeIsPutOnTheFloor
+        if (playerController != null)
+        {
+            playerController.cubeIsPutOnTheFloor += checkZoneController.CheckCubes;
+        }
     }
+
+    /*void Check()
+    {
+        CheckSolution.CheckPuzzleSolution(cubePositionsZone1, cubePositionsZone2);
+    }*/
 }

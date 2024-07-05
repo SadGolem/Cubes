@@ -2019,6 +2019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkSolution: {fileID: 1349245666}
   randomCubesGenerator: {fileID: 120076719}
+  checkZoneController: {fileID: 120076720}
   cubePrefab: {fileID: 1031091480465105724, guid: 070f61f41e82a594d809538a721b4c85, type: 3}
   zone1Grid: {fileID: 250500855}
   zone2Grid: {fileID: 325589745}
