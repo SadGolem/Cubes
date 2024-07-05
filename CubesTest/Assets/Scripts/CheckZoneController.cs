@@ -85,23 +85,25 @@ public class CheckZoneController : MonoBehaviour
 
             Vector3 positionZone2 = cubeZone2.transform.position - zone2Grid.position;
 
+
             GameObject cubeZone3 = zone3Objects.FirstOrDefault(obj =>
                 Vector3.Distance((obj.transform.position - zone1Grid.position), positionZone2) <= tolerance);
 
             if (cubeZone3 == null)
             {
-                Debug.Log("Не нашелся куб для " + cubeZone2.name);
+                Debug.Log("Corresponding cube not found for " + cubeZone2.name);
                 return false;
             }
 
             // Check if the original colors of the cubes match
             if (cubeZone2.GetComponent<Cube>().OriginalColor != cubeZone3.GetComponent<Cube>().OriginalColor)
             {
-                Debug.Log("Цвет не совпадает для " + cubeZone2.name + " и " + cubeZone3.name);
+                Debug.Log("Colors of cubes do not match for " + cubeZone2.name + " and " + cubeZone3.name);
                 return false;
             }
         }
 
+        Debug.Log("Colors match based on object positions");
         return true;
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Netcode;
 
 public class RandomCubesGenerator : MonoBehaviour
 {
@@ -49,9 +50,12 @@ public class RandomCubesGenerator : MonoBehaviour
         }
     }
 
+    [ClientRpc]
     private Cube CreateCube(GameObject cubePrefab, Transform zone, Vector3 position, string tag)
     {
         GameObject cube = Instantiate(cubePrefab, zone.position + position, Quaternion.identity, zone);
+        cube.GetComponent<NetworkObject>().Spawn();
+        /*NetworkServer.Spawn(cube);*/
         cube.name = count++.ToString();
         if (count == 9) { count = 0; }
         cube.tag = tag;
@@ -78,6 +82,7 @@ public class RandomCubesGenerator : MonoBehaviour
     }
 
     // Метод для очистки зоны от кубов
+    [ClientRpc]
     private void ClearZone(Transform zone, string tag)
     {
         foreach (GameObject cube in GameObject.FindGameObjectsWithTag(tag))
