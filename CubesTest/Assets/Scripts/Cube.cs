@@ -5,11 +5,6 @@ public class Cube : MonoBehaviour
     [SerializeField] private Interactable interactable;
     [SerializeField] private Renderer rendererObj;
 
-/*    public Cube()
-    {
-        originalColor = rendererObj.material.color;
-        interactable.isCanTouch = true;
-    }*/
     private void Start()
     {
         interactable.isCanTouch = true;
