@@ -228,8 +228,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 120076718}
-  - component: {fileID: 120076719}
-  - component: {fileID: 120076720}
   m_Layer: 0
   m_Name: CubeSpawn
   m_TagString: Untagged
@@ -255,32 +253,6 @@ Transform:
   - {fileID: 1761416619}
   m_Father: {fileID: 1171243855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &120076719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120076717}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89fb3e549ed77704fa3b72e7a67664a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &120076720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120076717}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 996d0f16e82d72440b071c635f90d227, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zone2Grid: {fileID: 325589745}
-  objectsInZone: []
 --- !u!1 &145587708
 GameObject:
   m_ObjectHideFlags: 0
@@ -1970,6 +1942,8 @@ GameObject:
   - component: {fileID: 1349245665}
   - component: {fileID: 1349245667}
   - component: {fileID: 1349245666}
+  - component: {fileID: 1349245669}
+  - component: {fileID: 1349245668}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -2017,13 +1991,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6761af15c4ad92644928b24e445a4a17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkSolution: {fileID: 1349245666}
-  randomCubesGenerator: {fileID: 120076719}
-  checkZoneController: {fileID: 120076720}
+  randomCubesGenerator: {fileID: 1349245668}
+  checkZoneController: {fileID: 1349245669}
   cubePrefab: {fileID: 1031091480465105724, guid: 070f61f41e82a594d809538a721b4c85, type: 3}
   zone1Grid: {fileID: 250500855}
   zone2Grid: {fileID: 325589745}
   zone3SpawnPoint: {fileID: 1761416619}
+--- !u!114 &1349245668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349245664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fb3e549ed77704fa3b72e7a67664a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1349245669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349245664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996d0f16e82d72440b071c635f90d227, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zone2Grid: {fileID: 325589745}
+  zone1Grid: {fileID: 250500855}
+  objectsInZone2: []
+  objectsInZone3: []
 --- !u!1 &1662253545
 GameObject:
   m_ObjectHideFlags: 0

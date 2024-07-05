@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class RandomCubesGenerator : MonoBehaviour
 {
+    int count = 0;
     // Данные для хранения набора кубов
     private List<Vector3> availablePositions = new List<Vector3>()
     {
@@ -51,6 +52,8 @@ public class RandomCubesGenerator : MonoBehaviour
     private Cube CreateCube(GameObject cubePrefab, Transform zone, Vector3 position, string tag)
     {
         GameObject cube = Instantiate(cubePrefab, zone.position + position, Quaternion.identity, zone);
+        cube.name = count++.ToString();
+        if (count == 9) { count = 0; }
         cube.tag = tag;
         Cube newCube = cube.GetComponent<Cube>();
         return newCube;

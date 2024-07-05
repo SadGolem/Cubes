@@ -1,88 +1,103 @@
-using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
+using UnityEngine;
 
 public class CheckZoneController : MonoBehaviour
 {
     public Transform zone2Grid;
-    public List<GameObject> objectsInZone = new List<GameObject>();
-    [SerializeField] private static float tolerance = 0.1f;
-
-    private void Start()
-    {
-       /* StartCoroutine(CheckSolutionCoroutine());*/ // Запуск корутины для проверки раз в секунду
-    }
-
-    private IEnumerator CheckSolutionCoroutine()
-    {
-        while (true)
-        {
-            CheckCubes();
-            yield return new WaitForSeconds(1f); // Пауза на 1 секунду
-        }
-    }
+    public Transform zone1Grid;
+    public List<GameObject> objectsInZone2 = new List<GameObject>();
+    public List<GameObject> objectsInZone3 = new List<GameObject>();
+    [SerializeField] private static float tolerance = 6f;
 
     public void CheckCubes()
     {
         Debug.Log("я проверяюсь");
         // Очистка предыдущих объектов
-        objectsInZone.Clear();
+        objectsInZone2.Clear();
+        objectsInZone3.Clear();
 
-        // Получение всех коллайдеров в зоне
-        Collider[] colliders = Physics.OverlapSphere(zone2Grid.position, zone2Grid.localScale.x * 100);
+        // Получение всех коллайдеров в зонах 2 и 3
+        Collider[] collidersZone2 = Physics.OverlapSphere(zone2Grid.position, zone2Grid.localScale.x * 100);
+        Collider[] collidersZone1 = Physics.OverlapSphere(zone1Grid.position, zone1Grid.localScale.x * 100);
 
-        // Проверка каждого коллайдера
-        foreach (Collider collider in colliders)
+        // Проверка каждого коллайдера в зоне 2
+        foreach (Collider collider in collidersZone2)
         {
-            // Проверка, имеет ли объект тэг "Zone1Cube"
-            if (collider.gameObject.CompareTag("Zone2Cube"))
+            if (collider.gameObject.CompareTag("Zone3Cube"))
             {
-                // Получение объекта, связанного с коллайдером
-                GameObject obj = collider.gameObject;
-
-                // Добавление объекта в список
-                objectsInZone.Add(obj);
-                Debug.Log(obj + " добавлен");
+                objectsInZone2.Add(collider.gameObject);
+                Debug.Log(collider.gameObject + " добавлен в зону 2");
             }
-            if (objectsInZone.Count > 0)
-                Debug.Log(GetObjectsPositions().First());
+        }
+
+        // Проверка каждого коллайдера в зоне 1
+        foreach (Collider collider in collidersZone1)
+        {
+            if (collider.gameObject.CompareTag("Zone1Cube"))
+            {
+                objectsInZone3.Add(collider.gameObject);
+                Debug.Log(collider.gameObject + " добавлен в зону 1");
+            }
+        }
+
+        // Проверка решения
+        if (objectsInZone2.Count > 0 && objectsInZone3.Count > 0)
+        {
+            if (CheckColorOrder(objectsInZone2, objectsInZone3))
+            {
+                Debug.Log("Пазл решен!");
+                // Добавьте код для обработки решения пазла
+            }
         }
     }
 
     // Метод для получения списка объектов и их позиций
-    public List<Vector3> GetObjectsPositions()
+    private List<Vector3> GetObjectsPositions(List<GameObject> objects, Transform referenceZone)
     {
         List<Vector3> positions = new List<Vector3>();
 
-        // Перебор объектов в зоне
-        foreach (GameObject obj in objectsInZone)
+        foreach (GameObject obj in objects)
         {
-            // Добавление позиции объекта в список
-            positions.Add(obj.transform.localPosition - zone2Grid.position);
+            // Calculate position relative to the referenceZone
+            Vector3 position = obj.transform.position - referenceZone.position;
+            positions.Add(position);
         }
 
         return positions;
     }
 
-    public bool CheckPuzzleSolution(List<Vector3> zone1, List<Vector3> zone2)
+
+    private bool CheckColorOrder(List<GameObject> zone2Objects, List<GameObject> zone3Objects)
     {
-        // Проверка, что размер наборов одинаковый
-        if (zone1.Count != zone2.Count)
+        // Check if the number of objects in zones 2 and 3 is the same
+        if (zone2Objects.Count != zone3Objects.Count)
         {
+            Debug.Log("Количество объектов не совпадает");
             return false;
         }
 
-        /*// Сортировка наборов для сравнения
-        cubePositionsZone1.Sort();
-        cubePositionsZone2.Sort();*/
+        Debug.Log("Проверка цветов");
 
-        // Проверка на совпадение с погрешностью
-        for (int i = 0; i < zone1.Count; i++)
+        for (int i = 0; i < zone2Objects.Count; i++)
         {
-            // Проверяем, что разница между позициями меньше заданного порога
-            if (Vector3.Distance(zone1[i], zone2[i]) > tolerance)
+            GameObject cubeZone2 = zone2Objects[i];
+
+            Vector3 positionZone2 = cubeZone2.transform.position - zone2Grid.position;
+
+            GameObject cubeZone3 = zone3Objects.FirstOrDefault(obj =>
+                Vector3.Distance((obj.transform.position - zone1Grid.position), positionZone2) <= tolerance);
+
+            if (cubeZone3 == null)
             {
+                Debug.Log("Не нашелся куб для " + cubeZone2.name);
+                return false;
+            }
+
+            // Check if the original colors of the cubes match
+            if (cubeZone2.GetComponent<Cube>().OriginalColor != cubeZone3.GetComponent<Cube>().OriginalColor)
+            {
+                Debug.Log("Цвет не совпадает для " + cubeZone2.name + " и " + cubeZone3.name);
                 return false;
             }
         }
@@ -90,3 +105,5 @@ public class CheckZoneController : MonoBehaviour
         return true;
     }
 }
+
+
