@@ -12,7 +12,7 @@ public class CubeGridController : MonoBehaviour
 
     private List<Vector3> cubePositionsZone1 = new List<Vector3>(); // Позиции кубов в зоне 1
     private List<Vector3> cubePositionsZone2 = new List<Vector3>(); // Позиции кубов в зоне 1
-    private List<GameObject> zone3Cubes = new List<GameObject>(); // Список кубов в зоне 3
+    private List<Cube> zone3Cubes = new List<Cube>(); // Список кубов в зоне 3
     private List<Color> randomCreatedColors = new List<Color>(); // Список созданных цветов
 
 

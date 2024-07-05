@@ -1,18 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Interactable interactable;
+    [SerializeField] private Renderer rendererObj;
+
+/*    public Cube()
     {
-        
+        originalColor = rendererObj.material.color;
+        interactable.isCanTouch = true;
+    }*/
+    private void Start()
+    {
+        interactable.isCanTouch = true;
+    }
+    public Color OriginalColor
+    {
+        get { return rendererObj.material.color; }
+        set { rendererObj.material.color = value; }
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool IsCanTouch
     {
-        
+        get { return interactable.isCanTouch; }
+        set { interactable.isCanTouch = value; }
     }
 }
