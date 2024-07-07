@@ -5,7 +5,7 @@ public class CubeGridController : MonoBehaviour
 {
     [SerializeField] private RandomCubesGenerator randomCubesGenerator;
     [SerializeField] private CheckZoneController checkZoneController;
-    [SerializeField] private GameObject cubePrefab; // Префаб куба
+    [SerializeField] public List<GameObject> cubePrefab; // Префаб куба
     [SerializeField] private Transform zone1Grid; // Трансформ сетки 3x3 в зоне 1
     [SerializeField] private Transform zone2Grid; // Трансформ сетки 3x3 в зоне 2
     [SerializeField] private Transform zone3SpawnPoint; // Трансформ точки появления кубов в зоне 3

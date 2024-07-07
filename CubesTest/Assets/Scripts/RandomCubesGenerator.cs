@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Netcode;
+using System.Linq;
 
-public class RandomCubesGenerator : MonoBehaviour
+public class RandomCubesGenerator : NetworkBehaviour
 {
     int count = 0;
     // Данные для хранения набора кубов
+    static bool isGenerated = false;
+
+
     private List<Vector3> availablePositions = new List<Vector3>()
     {
         new Vector3(-15, 10, -15),
@@ -20,7 +24,7 @@ public class RandomCubesGenerator : MonoBehaviour
     };
 
     // Метод для генерации случайного набора кубов в зоне 1
-    public void GenerateZone1Cubes(GameObject cubePrefab, Transform zone1Grid, List<Vector3> cubePositionsZone1, List<Color> randomCreatedColors)
+    public void GenerateZone1Cubes(List<GameObject> cubePrefab, Transform zone1Grid, List<Vector3> cubePositionsZone1, List<Color> randomCreatedColors)
     {
         ClearZone(zone1Grid, "Zone1Cube");
         cubePositionsZone1.Clear();
@@ -35,8 +39,10 @@ public class RandomCubesGenerator : MonoBehaviour
     }
 
     // Метод для создания кубов в зоне 3
-    public void CreateZone3Cubes(GameObject cubePrefab, Transform zone3SpawnPoint, List<Cube> zone3Cubes, List<Color> randomCreatedColors, List<Vector3> cubePositionsZone1)
+
+    public void CreateZone3Cubes(List<GameObject> cubePrefab, Transform zone3SpawnPoint, List<Cube> zone3Cubes, List<Color> randomCreatedColors, List<Vector3> cubePositionsZone1)
     {
+        if (isGenerated) { return; }
         ClearZone(zone3SpawnPoint, "Zone3Cube");
         zone3Cubes.Clear();
 
@@ -48,14 +54,14 @@ public class RandomCubesGenerator : MonoBehaviour
             randomCreatedColors.RemoveAt(0);
             zone3Cubes.Add(cube);
         }
+        isGenerated = true;
     }
 
-    [ClientRpc]
-    private Cube CreateCube(GameObject cubePrefab, Transform zone, Vector3 position, string tag)
+    private Cube CreateCube(List<GameObject> cubePrefab, Transform zone, Vector3 position, string tag)
     {
-        GameObject cube = Instantiate(cubePrefab, zone.position + position, Quaternion.identity, zone);
+        GameObject cube = Instantiate(cubePrefab.ElementAt(Random.Range(0, cubePrefab.Count)), zone.position + position, Quaternion.identity, zone);
         cube.GetComponent<NetworkObject>().Spawn();
-        /*NetworkServer.Spawn(cube);*/
+
         cube.name = count++.ToString();
         if (count == 9) { count = 0; }
         cube.tag = tag;
@@ -64,25 +70,20 @@ public class RandomCubesGenerator : MonoBehaviour
     }
 
     // Метод для создания случайного куба
-    private Cube CreateRandomCube(GameObject cubePrefab, Transform zone, List<Vector3> cubePositions, List<Color> randomCreatedColors, string tag)
+    private Cube CreateRandomCube(List<GameObject> cubePrefab, Transform zone, List<Vector3> cubePositions, List<Color> randomCreatedColors, string tag)
     {
         int randomIndex = Random.Range(0, availablePositions.Count);
         Vector3 randomPosition = availablePositions[randomIndex];
         cubePositions.Add(randomPosition);
         availablePositions.RemoveAt(randomIndex);
-
         Cube cube = CreateCube(cubePrefab, zone, randomPosition, tag);
 
-        Color color = Random.ColorHSV();
-        randomCreatedColors.Add(color);
-        cube.OriginalColor = color;
+        
+        randomCreatedColors.Add(cube.OriginalColor);
         cube.IsCanTouch = false;
-
         return cube;
     }
 
-    // Метод для очистки зоны от кубов
-    [ClientRpc]
     private void ClearZone(Transform zone, string tag)
     {
         foreach (GameObject cube in GameObject.FindGameObjectsWithTag(tag))

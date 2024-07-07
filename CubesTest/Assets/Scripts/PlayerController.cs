@@ -25,7 +25,7 @@ public class PlayerController : NetworkBehaviour, IPlayerController
     }
     public void Interaction()
     {
-        if (!IsLocalPlayer)
+        if (!IsOwner)
             return;
 
         if (Input.GetKeyDown(KeyCode.E))
