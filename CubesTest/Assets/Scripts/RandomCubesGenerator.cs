@@ -24,24 +24,24 @@ public class RandomCubesGenerator : NetworkBehaviour
     };
 
     // Метод для генерации случайного набора кубов в зоне 1
-    public void GenerateZone1Cubes(List<GameObject> cubePrefab, Transform zone1Grid, List<Vector3> cubePositionsZone1, List<Color> randomCreatedColors)
+    public void GenerateZone1Cubes(List<GameObject> cubePrefab, Transform zone1Grid, List<Vector3> cubePositionsZone1, List<Cube> cubes)
     {
         ClearZone(zone1Grid, "Zone1Cube");
         cubePositionsZone1.Clear();
-        randomCreatedColors.Clear();
+        cubes.Clear();
         Debug.Log("генерация зоны 1");
         for (int i = 0; i < 9; i++)
         {
-            CreateRandomCube(cubePrefab, zone1Grid, cubePositionsZone1, randomCreatedColors, "Zone1Cube");
+            CreateRandomCube(cubePrefab, zone1Grid, cubePositionsZone1, cubes, "Zone1Cube");
         }
 
-        randomCreatedColors.Reverse();
+        cubes.Reverse();
     }
 
     // Метод для создания кубов в зоне 3
 
     /*[ServerRpc]*/
-    public void CreateZone3Cubes(List<GameObject> cubePrefab, Transform zone3SpawnPoint, List<Cube> zone3Cubes, List<Color> randomCreatedColors, List<Vector3> cubePositionsZone1)
+    public void CreateZone3Cubes(List<GameObject> cubePrefab, Transform zone3SpawnPoint, List<Cube> zone3Cubes, List<Cube> randomCreatedColors, List<Vector3> cubePositionsZone1)
     {
         if (isGenerated) { return; }
         ClearZone(zone3SpawnPoint, "Zone3Cube");
@@ -50,8 +50,8 @@ public class RandomCubesGenerator : NetworkBehaviour
         // Создание кубов в зоне 3
         foreach (Vector3 position in cubePositionsZone1)
         {
-            Cube cube = CreateCube(cubePrefab, zone3SpawnPoint, position, "Zone3Cube");
-            cube.OriginalColor = randomCreatedColors[0];
+            Cube cube = Instantiate(randomCreatedColors[0] , zone3SpawnPoint.position + position, Quaternion.identity /*"Zone3Cube"*/);
+            cube.GetComponent<NetworkObject>().Spawn();
             randomCreatedColors.RemoveAt(0);
             zone3Cubes.Add(cube);
         }
@@ -71,7 +71,7 @@ public class RandomCubesGenerator : NetworkBehaviour
     }
 
     // Метод для создания случайного куба
-    private Cube CreateRandomCube(List<GameObject> cubePrefab, Transform zone, List<Vector3> cubePositions, List<Color> randomCreatedColors, string tag)
+    private Cube CreateRandomCube(List<GameObject> cubePrefab, Transform zone, List<Vector3> cubePositions, List<Cube> randomCreatedColors, string tag)
     {
         int randomIndex = Random.Range(0, availablePositions.Count);
         Vector3 randomPosition = availablePositions[randomIndex];
@@ -80,7 +80,7 @@ public class RandomCubesGenerator : NetworkBehaviour
         Cube cube = CreateCube(cubePrefab, zone, randomPosition, tag);
 
         
-        randomCreatedColors.Add(cube.OriginalColor);
+        randomCreatedColors.Add(cube);
         cube.IsCanTouch = false;
         return cube;
     }

@@ -14,9 +14,9 @@ public class Interactable : NetworkBehaviour, IInterectable
         if (!isUsing && player.CanUsingCube)
         {
             // Прикрепляем объект к персонажу
-            
-            transform.GetComponent<NetworkObject>().ChangeOwnership(player.GetComponent<NetworkObject>().OwnerClientId);
-            transform.SetParent(player.transform);
+            if(IsServer)
+                transform.GetComponent<NetworkObject>().ChangeOwnership(player.GetComponent<NetworkObject>().OwnerClientId);
+            /*transform.SetParent(player.transform);*/
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
 

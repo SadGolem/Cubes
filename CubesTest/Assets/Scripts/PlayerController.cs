@@ -34,10 +34,11 @@ public class PlayerController : NetworkBehaviour, IPlayerController, INetworkSer
 
     void CmdInteraction()
     {
-        DoInteractionRpc();
+        DoInteractionServerRpc();
     }
 
-    void DoInteractionRpc()
+    [ServerRpc]
+    void DoInteractionServerRpc()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, interactionDistance);
 

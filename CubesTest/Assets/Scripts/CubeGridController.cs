@@ -16,6 +16,7 @@ public class CubeGridController : MonoBehaviour
     private List<Vector3> cubePositionsZone2 = new List<Vector3>(); // Позиции кубов в зоне 1
     private List<Cube> zone3Cubes = new List<Cube>(); // Список кубов в зоне 3
     private List<Color> randomCreatedColors = new List<Color>(); // Список созданных цветов
+    private List<Cube> cubes = new List<Cube>(); // Список созданных цветов
 
     private void Start()
     {
@@ -28,8 +29,8 @@ public class CubeGridController : MonoBehaviour
     void StartGame()
     {
         Debug.Log("запуск");
-        randomCubesGenerator.GenerateZone1Cubes(cubePrefab, zone1Grid, cubePositionsZone1, randomCreatedColors);
-        randomCubesGenerator.CreateZone3Cubes(cubePrefab, zone3SpawnPoint, zone3Cubes, randomCreatedColors, cubePositionsZone1);
+        randomCubesGenerator.GenerateZone1Cubes(cubePrefab, zone1Grid, cubePositionsZone1, cubes);
+        randomCubesGenerator.CreateZone3Cubes(cubePrefab, zone3SpawnPoint, zone3Cubes, cubes, cubePositionsZone1);
     }
 
     public void SubscribeOnthePlayer(PlayerController playerController)
