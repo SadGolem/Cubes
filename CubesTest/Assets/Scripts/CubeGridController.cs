@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class CubeGridController : MonoBehaviour
@@ -26,6 +27,7 @@ public class CubeGridController : MonoBehaviour
 
     void StartGame()
     {
+        Debug.Log("запуск");
         randomCubesGenerator.GenerateZone1Cubes(cubePrefab, zone1Grid, cubePositionsZone1, randomCreatedColors);
         randomCubesGenerator.CreateZone3Cubes(cubePrefab, zone3SpawnPoint, zone3Cubes, randomCreatedColors, cubePositionsZone1);
     }
@@ -37,5 +39,7 @@ public class CubeGridController : MonoBehaviour
         {
             playerController.cubeIsPutOnTheFloor += checkZoneController.CheckCubes;
         }
+        Debug.Log("пользователь подписался на событие");
     }
+
 }

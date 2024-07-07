@@ -1,18 +1,23 @@
+
+using Unity.Netcode;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour, IInterectable
+public class Interactable : NetworkBehaviour, IInterectable
 {
     private bool isUsing = false;
     public bool isCanTouch = true;
 
-    public void Use(PlayerController player)
+    [ServerRpc(RequireOwnership = false)]
+    public void UseServerRpc(PlayerController player)
     {
         if (!isCanTouch) return;
         if (!isUsing && player.CanUsingCube)
         {
             // Прикрепляем объект к персонажу
+            
+            transform.GetComponent<NetworkObject>().ChangeOwnership(player.GetComponent<NetworkObject>().OwnerClientId);
             transform.SetParent(player.transform);
-            transform.localPosition = Vector3.zero; 
+            transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
 
             Debug.Log("Я взялся");

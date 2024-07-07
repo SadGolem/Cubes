@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public interface IPlayerController
@@ -13,7 +14,7 @@ public interface IPlayer
     //на случай необходимости реализации IPlayer
 }
 
-public interface IInterectable
+public interface IInterectable 
 {
-    public void Use(PlayerController player);
+    public void UseServerRpc(PlayerController player);
 }

@@ -29,7 +29,7 @@ public class RandomCubesGenerator : NetworkBehaviour
         ClearZone(zone1Grid, "Zone1Cube");
         cubePositionsZone1.Clear();
         randomCreatedColors.Clear();
-
+        Debug.Log("генерация зоны 1");
         for (int i = 0; i < 9; i++)
         {
             CreateRandomCube(cubePrefab, zone1Grid, cubePositionsZone1, randomCreatedColors, "Zone1Cube");
@@ -40,12 +40,13 @@ public class RandomCubesGenerator : NetworkBehaviour
 
     // Метод для создания кубов в зоне 3
 
+    /*[ServerRpc]*/
     public void CreateZone3Cubes(List<GameObject> cubePrefab, Transform zone3SpawnPoint, List<Cube> zone3Cubes, List<Color> randomCreatedColors, List<Vector3> cubePositionsZone1)
     {
         if (isGenerated) { return; }
         ClearZone(zone3SpawnPoint, "Zone3Cube");
         zone3Cubes.Clear();
-
+        Debug.Log("генерация зоны 3");
         // Создание кубов в зоне 3
         foreach (Vector3 position in cubePositionsZone1)
         {
@@ -91,5 +92,7 @@ public class RandomCubesGenerator : NetworkBehaviour
             Destroy(cube);
         }
     }
+
+
 }
 
