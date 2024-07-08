@@ -13,9 +13,7 @@ public class CubeGridController : MonoBehaviour
     [SerializeField] private NetWorkUI netWorkUI;
 
     private List<Vector3> cubePositionsZone1 = new List<Vector3>(); // Позиции кубов в зоне 1
-    private List<Vector3> cubePositionsZone2 = new List<Vector3>(); // Позиции кубов в зоне 1
     private List<Cube> zone3Cubes = new List<Cube>(); // Список кубов в зоне 3
-    private List<Color> randomCreatedColors = new List<Color>(); // Список созданных цветов
     private List<Cube> cubes = new List<Cube>(); // Список созданных цветов
 
     private void Start()

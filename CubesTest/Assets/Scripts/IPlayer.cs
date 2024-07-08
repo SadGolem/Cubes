@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
-using UnityEngine;
-
 public interface IPlayerController
 {
     public void Move();
@@ -16,5 +11,5 @@ public interface IPlayer
 
 public interface IInterectable 
 {
-    public void UseServerRpc(PlayerController player);
+    public void Use(PlayerController player);
 }

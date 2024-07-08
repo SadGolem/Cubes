@@ -8,7 +8,7 @@ public class PlayerController : NetworkBehaviour, IPlayerController, INetworkSer
     [SerializeField] private float speed = 5f;
     [SerializeField] private float interactionDistance = 3f;
     [SerializeField] private float positionRange = 5f;
-    private bool isUsingCube = true;
+    private bool isUsingCube = false;
     public bool CanUsingCube { get { return isUsingCube; } set { isUsingCube = value; } }
     public event Action cubeIsPutOnTheFloor;
 
@@ -18,8 +18,6 @@ public class PlayerController : NetworkBehaviour, IPlayerController, INetworkSer
         cubeGridController.SubscribeOnthePlayer(this);
         Debug.Log("пользователь" + this + "зашел");
     }
-
-/*    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();*/
 
     public override void OnNetworkSpawn()
     {
@@ -48,7 +46,7 @@ public class PlayerController : NetworkBehaviour, IPlayerController, INetworkSer
             Interactable interactable = collider.GetComponent<Interactable>();
             if (interactable != null)
             {
-                interactable.UseServerRpc(this);
+                interactable.Use(this);
                 isUsingCube = !isUsingCube;
                 if (isUsingCube)
                     cubeIsPutOnTheFloor?.Invoke();
@@ -67,9 +65,6 @@ public class PlayerController : NetworkBehaviour, IPlayerController, INetworkSer
         if (!IsOwner) return;
         Interaction();
         Move();
-        // Передаем запрос на перемещение на сервер
-        /*Move(movement);*/
-
     }
 
     public void Move()
@@ -78,7 +73,6 @@ public class PlayerController : NetworkBehaviour, IPlayerController, INetworkSer
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
-        /*movement.Normalize();*/
 
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
     }

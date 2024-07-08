@@ -172,6 +172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCanTouch: 1
+  rb: {fileID: 4216199743254222733}
+  playerOwner: {fileID: 0}
 --- !u!114 &-8257795436436892004
 MonoBehaviour:
   m_ObjectHideFlags: 0
