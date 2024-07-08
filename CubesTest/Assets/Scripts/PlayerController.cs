@@ -2,6 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
+[RequireComponent(typeof(NetworkObject))]
 public class PlayerController : NetworkBehaviour, IPlayerController, INetworkSerializable
 {
     [SerializeField] private float speed = 5f;

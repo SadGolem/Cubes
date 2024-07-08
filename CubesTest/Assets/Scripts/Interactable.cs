@@ -7,7 +7,7 @@ public class Interactable : NetworkBehaviour, IInterectable
     private bool isUsing = false;
     public bool isCanTouch = true;
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc/*(RequireOwnership = false)*/]
     public void UseServerRpc(PlayerController player)
     {
         if (!isCanTouch) return;
@@ -16,7 +16,7 @@ public class Interactable : NetworkBehaviour, IInterectable
             // Прикрепляем объект к персонажу
             if(IsServer)
                 transform.GetComponent<NetworkObject>().ChangeOwnership(player.GetComponent<NetworkObject>().OwnerClientId);
-            /*transform.SetParent(player.transform);*/
+            transform.SetParent(player.transform);
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
 
